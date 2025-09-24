@@ -1,6 +1,9 @@
-# MyWebsite Project
+# CareerCanvas
 
 ## Overview
+CareerCanvas is a career guidance platform designed to help users discover, plan, and achieve their professional goals.
+
+### Structure
 This project is organized into two main parts:
 - **frontend/**: All user interface files (HTML, CSS, JS, images)
 - **backend/**: Server-side code and data
