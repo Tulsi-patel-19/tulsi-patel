@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career & Education Advisor</title>
+<link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; font-family:Arial,sans-serif; }
+  body { display:flex; min-height:100vh; background:#f9fafb; color:#333; }
+
+  /* Blur effect when login is active */
+  body.blur #app { 
+    filter: blur(8px);
+    pointer-events: none; 
+    user-select: none;
+  }
+
+  /* Login overlay */
+  .login-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+  }
+
+  .login-box {
+    width: 90%;
+    max-width: 400px;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    animation: fadeIn 0.5s ease;
+  }
+
+  .login-box h2 {
+    text-align: center;
+    color: #2563eb;
+    margin-bottom: 20px;
+  }
+
+  .login-box label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+  }
+
+  .login-box input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+
+  .login-box .forgot {
+    text-align: right;
+    margin-bottom: 15px;
+  }
+  .login-box .forgot a { font-size: 14px; color: #2563eb; text-decoration: none; }
+
+  .login-box button {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 15px;
+  }
+  .login-box button:hover { background:#1e40af; }
+
+  /* Social buttons */
+  .social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+  }
+  .google { background: #fff; border: 1px solid #ccc; }
+  .google:hover { background: #f8f9fa; }
+  .facebook { background:#1877f2; color:white; }
+  .facebook:hover { background:#0d5fc2; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+
+  /* Success message */
+  .success-msg {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #22c55e;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: none;
+    animation: fadeIn 0.5s ease;
+    z-index: 1000;
+  }
+
+  /* -------- Home Page Styling -------- */
+  .sidebar { width:250px; background:#2563eb; color:white; display:flex; flex-direction:column; position:fixed; top:0; bottom:0; left:0; transition:width 0.3s; z-index:100;}
+  .sidebar.collapsed{width:70px;}
+  .sidebar h2{text-align:center;padding:20px 0;font-size:22px;border-bottom:1px solid rgba(255,255,255,0.2);}
+  .sidebar.collapsed h2{opacity:0;}
+  .menu{flex:1;display:flex;flex-direction:column;padding-top:20px;}
+  .menu a{display:flex;align-items:center;padding:15px 20px;color:#ecf0f1;text-decoration:none;font-size:16px;transition:all 0.3s;white-space:nowrap;}
+  .menu a:hover{background:#1e40af;color:#1abc9c;}
+  .menu a i{margin-right:15px; min-width:20px;text-align:center;}
+  .sidebar.collapsed .menu a span{display:none;}
+  .toggle-btn{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);background:#1abc9c;color:#fff;border:none;padding:10px;cursor:pointer;border-radius:5px;}
+
+  .topbar{position:fixed;top:0;left:250px;right:0;height:60px;background:#2563eb;color:white;display:flex;align-items:center;justify-content:space-between;padding:0 20px;box-shadow:0 2px 6px rgba(0,0,0,0.1); z-index:99;transition:left 0.3s;}
+  .sidebar.collapsed ~ .topbar{left:70px;}
+  .topbar .logo{font-size:1.5rem;font-weight:bold;}
+  .logout-btn {
+    background: #ef4444;
+    border: none;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .logout-btn:hover { background: #b91c1c; }
+
+  .main-content{flex:1; margin-left:250px; padding:80px 20px 20px 20px; transition:margin-left 0.3s;}
+  .sidebar.collapsed ~ .main-content{margin-left:70px;}
+
+  header{text-align:center;padding:2rem 1rem;background:#2563eb;color:white;margin-bottom:20px;border-radius:10px;}
+  header h1{font-size:2.5rem;}
+  header p{max-width:600px;margin:0.5rem auto 0;font-size:1.1rem;}
+  .container { display:flex; flex-direction:column; align-items:center; gap:2rem; max-width:1200px; margin:auto; }
+  .card-row{ display:flex; justify-content:center; gap:2rem; flex-wrap:wrap; }
+  .card { background:white; padding:1.5rem; border-radius:1rem; box-shadow:0 4px 10px rgba(0,0,0,0.1); text-align:center; transition:transform 0.2s ease; min-width:200px; flex:1; max-width:250px;}
+  .card:hover{ transform:scale(1.03);}
+  .card h2{ margin-bottom:0.5rem; font-size:1.5rem; color:#1f2937;}
+  .card p{ color:#4b5563; font-size:0.95rem; margin-bottom:1rem;}
+  .btn{ background-color:#2563eb; color:white; padding:0.6rem 1.2rem; border:none; border-radius:0.5rem; cursor:pointer; font-size:1rem; transition:background 0.3s ease; text-decoration:none; display:inline-block;}
+  .btn:hover{ background-color:#1e40af; }
+  footer{background:#1f2937;color:white;text-align:center;padding:1rem;margin-top:2rem;font-size:0.9rem; border-radius:10px;}
+</style>
+</head>
+<body class="blur">
+
+  <!-- ✅ Success message -->
+  <div class="success-msg" id="successMsg">✅ You have logged in successfully!</div>
+
+  <!-- 🔹 Login Overlay -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <label>Email</label>
+        <input type="email" id="email" required>
+        <label>Password</label>
+        <input type="password" id="password" required>
+        <div class="forgot"><a href="#">Forgot Password?</a></div>
+        <button type="submit">Login</button>
+      </form>
+      <button class="social-btn google">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png" width="18"> Continue with Google
+      </button>
+      <button class="social-btn facebook">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" width="18"> Continue with Facebook
+      </button>
+    </div>
+  </div>
+
+  <!-- 🔹 Main App (Initially Blurred) -->
+  <div id="app" style="width:100%;">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <h2>Career Paths</h2>
+      <div class="menu">
+        <a href="#"><i class='bx bx-question-mark'></i> <span>Quiz</span></a>
+        <a href="#"><i class='bx bx-book-content'></i> <span>Stream Recommendation</span></a>
+        <a href="#"><i class='bx bx-book'></i> <span>Degree Courses</span></a>
+        <a href="#"><i class='bx bx-building'></i> <span>Nearby Colleges</span></a>
+        <a href="#"><i class='bx bx-briefcase'></i> <span>Internships</span></a>
+        <a href="#"><i class='bx bx-chalkboard'></i> <span>Workshops</span></a>
+      </div>
+      <button class="toggle-btn" onclick="toggleSidebar()">Toggle</button>
+    </div>
+
+    <!-- Top Navbar -->
+    <div class="topbar">
+      <div class="logo">Career Advisor</div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <header>
+        <h1>One-Stop Career & Education Advisor</h1>
+        <p>Align your career path by exploring options that match your interests, skills, and future goals.</p>
+      </header>
+
+      <main class="container">
+        <div class="card-row">
+          <div class="card"><h2>After 10th</h2><p>Select courses to find your stream.</p><button class="btn">Select Courses</button></div>
+          <div class="card"><h2>After 12th</h2><p>Explore degree programs.</p><button class="btn">Explore Programs</button></div>
+          <div class="card"><h2>Govt Exams</h2><p>UPSC, SSC, JEE, NEET and more.</p><button class="btn">View Details</button></div>
+        </div>
+      </main>
+      <footer>&copy; 2025 Career & Education Advisor</footer>
+    </div>
+  </div>
+
+<script>
+  const sidebar=document.getElementById('sidebar');
+  function toggleSidebar(){ sidebar.classList.toggle('collapsed'); }
+
+  // 🔹 Login Logic
+  document.getElementById("loginForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    const email=document.getElementById("email").value;
+    const pass=document.getElementById("password").value;
+    if(email && pass){
+      document.body.classList.remove("blur");
+      document.getElementById("loginOverlay").style.display="none";
+      localStorage.setItem("loggedIn","true");
+
+      // Show success message
+      const msg=document.getElementById("successMsg");
+      msg.style.display="block";
+      setTimeout(()=>{ msg.style.display="none"; },3000);
+    } else {
+      alert("Please enter email and password");
+    }
+  });
+
+  // 🔹 Keep user logged in if already authenticated
+  window.onload=function(){
+    if(localStorage.getItem("loggedIn")==="true"){
+      document.body.classList.remove("blur");
+      document.getElementById("loginOverlay").style.display="none";
+    }
+  }
+
+  // 🔹 Logout
+  function logout(){
+    localStorage.removeItem("loggedIn");
+    document.body.classList.add("blur");
+    document.getElementById("loginOverlay").style.display="flex";
+  }
+</script>
+</body>
+</html>

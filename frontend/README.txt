@@ -1,0 +1,1 @@
+This folder contains all frontend (client-side) files: HTML, CSS, JS, and images.

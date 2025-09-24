@@ -1,0 +1,15 @@
+{
+  "careerPaths": [
+    { "title": "Science Stream", "description": "Best for engineering, medicine, research careers" },
+    { "title": "Commerce Stream", "description": "Perfect for business, management, finance careers" },
+    { "title": "Arts Stream", "description": "Ideal for humanities, social sciences, law careers" }
+  ],
+  "govExams": [
+    { "name": "UPSC", "details": "Civil services, IAS/IPS exams" },
+    { "name": "SSC", "details": "Staff Selection Commission jobs" }
+  ],
+  "colleges": [
+    { "name": "Govt. Degree College A", "location": "City Center" },
+    { "name": "Govt. Degree College B", "location": "Suburban Area" }
+  ]
+}

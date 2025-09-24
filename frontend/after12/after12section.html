@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Guidance - After 12th</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      text-align: center;
+      background: #007bff;
+      color: white;
+      padding: 20px;
+      font-size: 1.5rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .stream-selector {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .btn-quiz {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    .btn-quiz:hover {
+      background: #0056b3;
+    }
+
+    #after12-options {
+      margin-top: 25px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #f9f9f9;
+      box-shadow: 0px 3px 8px rgba(0,0,0,0.1);
+    }
+
+    #after12-options h3 {
+      margin-top: 15px;
+      font-size: 1.3rem;
+      color: #333;
+    }
+
+    #after12-options ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    #after12-options li {
+      margin: 6px 0;
+    }
+
+    #after12-options a {
+      text-decoration: none;
+      color: #007bff;
+      transition: color 0.3s;
+    }
+
+    #after12-options a:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>Career Guidance - After 12th</header>
+
+  <div class="container">
+    <h2>What did you choose after 10th?</h2>
+    <div class="stream-selector">
+      <button class="btn-quiz" onclick="selectStream('science')">Science</button>
+      <button class="btn-quiz" onclick="selectStream('commerce')">Commerce</button>
+      <button class="btn-quiz" onclick="selectStream('arts')">Arts</button>
+      <button class="btn-quiz" onclick="selectStream('diploma')">Diploma</button>
+    </div>
+
+    <div id="after12-options"></div>
+  </div>
+
+  <script>
+    function selectStream(stream) {
+      const container = document.getElementById('after12-options');
+      let html = '';
+
+      if (stream === 'science') {
+        html = `
+          <h3>Science Stream</h3>
+          <p>Select your focus:</p>
+          <button class="btn-quiz" onclick="showScienceOptions('maths')">PCM (Maths)</button>
+          <button class="btn-quiz" onclick="showScienceOptions('biology')">PCB (Biology)</button>
+        `;
+      } else if (stream === 'commerce') {
+        html = `
+          <h3>Commerce Stream Options</h3>
+          <ul>
+            <li><a href="careers/bcom.html">B.Com (General / Honors)</a></li>
+            <li><a href="careers/ca.html">CA Foundation / CMA</a></li>
+            <li><a href="careers/bba.html">BBA / BMS</a></li>
+            <li><a href="careers/economics.html">Economics (Hons.)</a></li>
+            <li><a href="careers/law.html">LLB (Law)</a></li>
+          </ul>
+        `;
+      } else if (stream === 'arts') {
+        html = `
+          <h3>Arts Stream Options</h3>
+          <ul>
+            <li><a href="careers/ba.html">BA (History / Political Science / Sociology / Psychology)</a></li>
+            <li><a href="careers/bfa.html">BFA (Fine Arts)</a></li>
+            <li><a href="careers/bed.html">B.Ed (Teacher Training)</a></li>
+            <li><a href="careers/masscomm.html">Mass Communication & Journalism</a></li>
+            <li><a href="careers/hotelmgmt.html">Hotel Management</a></li>
+          </ul>
+        `;
+      } else if (stream === 'diploma') {
+        html = `
+          <h3>Diploma Holders Options</h3>
+          <ul>
+            <li><a href="careers/btech-lateral.html">Lateral Entry B.Tech (Direct 2nd Year)</a></li>
+            <li><a href="careers/amie.html">AMIE (Engineering)</a></li>
+            <li><a href="careers/advanced-diploma.html">Advanced Diploma / Specialization</a></li>
+            <li><a href="careers/govt-jobs.html">Competitive Exams for Govt Jobs</a></li>
+          </ul>
+        `;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function showScienceOptions(type) {
+      const container = document.getElementById('after12-options');
+      if (type === 'maths') {
+        container.innerHTML = `
+          <h3>Science (PCM) Career Options</h3>
+          <h4>🏗️ Engineering & Technology</h4>
+          <ul>
+            <li><a href="careers/btech.html">B.Tech / BE (Engineering)</a></li>
+            <li><a href="careers/barch.html">B.Arch (Architecture)</a></li>
+            <li><a href="careers/bplan.html">B.Plan (Urban/Town Planning)</a></li>
+          </ul>
+
+          <h4>💻 Computer & IT</h4>
+          <ul>
+            <li><a href="careers/bca.html">BCA (Bachelor of Computer Applications)</a></li>
+            <li><a href="careers/bsc-it.html">B.Sc IT (Information Technology)</a></li>
+            <li><a href="careers/bsc-cs.html">B.Sc CS (Computer Science)</a></li>
+            <li><a href="careers/bsc-datascience.html">B.Sc Data Science / AI / ML</a></li>
+            <li><a href="careers/animation.html">Animation / Game Design / VFX</a></li>
+          </ul>
+
+          <h4>🏛️ Pure Science & Research</h4>
+          <ul>
+            <li><a href="careers/bsc-physics.html">B.Sc Physics</a></li>
+            <li><a href="careers/bsc-chemistry.html">B.Sc Chemistry</a></li>
+            <li><a href="careers/bsc-maths.html">B.Sc Maths / Statistics</a></li>
+            <li><a href="careers/iiser.html">Integrated M.Sc (IISER / NISER / IIT)</a></li>
+          </ul>
+
+          <h4>✈️ Defence & Government</h4>
+          <ul>
+            <li><a href="careers/nda.html">NDA (Army, Navy, Airforce)</a></li>
+            <li><a href="careers/merchant-navy.html">Merchant Navy</a></li>
+          </ul>
+
+          <h4>📊 Business & Management</h4>
+          <ul>
+            <li><a href="careers/bba.html">BBA / BMS</a></li>
+            <li><a href="careers/mba-integrated.html">Integrated MBA (5 Years)</a></li>
+            <li><a href="careers/bhm.html">BHM (Hotel Management)</a></li>
+            <li><a href="careers/travel-tourism.html">Travel & Tourism Management</a></li>
+          </ul>
+
+          <h4>🎨 Creative & Design</h4>
+          <ul>
+            <li><a href="careers/bdes.html">B.Des (Fashion, Interior, Product Design)</a></li>
+            <li><a href="careers/animation.html">Multimedia / Film Making</a></li>
+            <li><a href="careers/architecture.html">Architecture</a></li>
+          </ul>
+
+          <h4>✈️ Specialized & Vocational</h4>
+          <ul>
+            <li><a href="careers/pilot.html">Commercial Pilot Training (CPL)</a></li>
+            <li><a href="careers/aviation.html">Aviation Management</a></li>
+            <li><a href="careers/fire-safety.html">Fire & Safety Engineering</a></li>
+            <li><a href="careers/robotics.html">Robotics / Industrial Design</a></li>
+            <li><a href="careers/event-management.html">Event Management</a></li>
+          </ul>
+        `;
+      } else {
+        container.innerHTML = `
+          <h3>Science (PCB) Career Options</h3>
+          <ul>
+            <li><a href="careers/mbbs.html">MBBS / BDS / BHMS / BAMS</a></li>
+            <li><a href="careers/bsc-nursing.html">B.Sc Nursing</a></li>
+            <li><a href="careers/bpt.html">BPT (Physiotherapy)</a></li>
+            <li><a href="careers/bsc-bio.html">B.Sc (Biotech / Microbiology)</a></li>
+            <li><a href="careers/pharmacy.html">Pharmacy (B.Pharm)</a></li>
+          </ul>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>

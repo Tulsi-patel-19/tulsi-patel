@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Career Paths — EduCareer Hub</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Header same as index -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand"><img src="assets/logo.png" alt="logo" class="logo"/><span>EduCareer Hub</span></a>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="career.html" class="active">Career Paths</a>
+        <a href="mentors.html">Mentorship</a>
+        <a href="resources.html">Resources</a>
+        <a href="internships.html">Opportunities</a>
+        <a href="contact.html" class="btn-outline">Contact</a>
+      </nav>
+      <button class="nav-toggle">☰</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="page-head">
+      <h1>Career Paths</h1>
+      <p>Explore detailed tracks — what to learn, sample projects, skill-level and suggested timelines.</p>
+    </section>
+
+    <section class="filters">
+      <input id="career-search" placeholder="Search careers (e.g. 'Data', 'Design', 'Civil')"/>
+      <select id="career-level">
+        <option value="">All levels</option>
+        <option value="Beginner">Beginner</option>
+        <option value="Intermediate">Intermediate</option>
+        <option value="Advanced">Advanced</option>
+      </select>
+      <button id="filter-btn" class="btn-primary">Filter</button>
+    </section>
+
+    <section id="career-list" class="cards-grid">
+      <!-- Cards are injected by JS -->
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><h4>EduCareer Hub</h4><p>Helping students find the right path.</p></div>
+      <div><h4>Quick links</h4><a href="career.html">Career Paths</a><a href="mentors.html">Mentorship</a></div>
+      <div><h4>Contact</h4><p>hello@educareerhub.example</p></div>
+    </div>
+    <div class="copyright">© 2025 EduCareer Hub</div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

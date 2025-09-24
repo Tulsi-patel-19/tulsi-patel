@@ -1,0 +1,1 @@
+This folder contains files that do not fit into frontend or backend.

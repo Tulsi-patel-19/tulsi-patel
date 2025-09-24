@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>After 10th - Career Stream Selector</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background: #2563eb;
+      color: white;
+      padding: 1.5rem;
+    }
+    h1, h2 {
+      margin: 0.5rem 0;
+    }
+    .options {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 2rem auto;
+      max-width: 600px;
+    }
+    .btn {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #1e40af;
+    }
+    .quiz-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      text-align: left;
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: none;
+    }
+    .question {
+      margin-bottom: 1rem;
+    }
+    .result {
+      margin-top: 1.5rem;
+      font-size: 1.3rem;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Choose Your Career Stream</h1>
+    <p>Select your stream and take a multi-level quiz to know if you are eligible!</p>
+  </header>
+
+  <!-- Step 1: Stream Options -->
+  <section id="stream-selection">
+    <h2>Select Your Stream</h2>
+    <div class="options">
+      <button class="btn" onclick="chooseStream('science')">Science</button>
+      <button class="btn" onclick="chooseStream('commerce')">Commerce</button>
+      <button class="btn" onclick="chooseStream('arts')">Arts</button>
+    </div>
+  </section>
+
+  <!-- Step 2: Science Options -->
+  <section id="science-options" style="display:none;">
+    <h2>You selected Science — choose your subject</h2>
+    <div class="options">
+      <button class="btn" onclick="startQuiz('maths')">Maths</button>
+      <button class="btn" onclick="startQuiz('biology')">Biology</button>
+    </div>
+  </section>
+
+  <!-- Step 3: Quiz Section -->
+  <div id="quiz-container" class="quiz-container"></div>
+
+  <script>
+    const quizContainer = document.getElementById("quiz-container");
+
+    const questions = {
+      maths: {
+        low: [
+          { q: "The point (0,5) lies on which axis?", options: ["X-axis", "Y-axis", "Origin"], answer: "Y-axis" },
+          { q: "Square root of 81?", options: ["3", "8", "9"], answer: "9" },
+          { q: "What is the value of tan45°?", options: ["0", "1", "2"], answer: "1" },
+          { q: "Value of π (approx)?", options: ["3.14", "3.41", "3.15"], answer: "3.14" },
+          { q: "If x = 2, value of 3x - 12x = ?", options: ["18", "-18", "20"], answer: "-18" }
+        ],
+        medium: [
+          { q: "The coordinates of centroid of triangle with vertices (0,0), (6,0), (0,6):", options: ["(2,2)", "(4,2)", "(3,3)"], answer: "(2,2)" },
+          { q: "A line intersecting a circle at two points is called:", options: ["Tangent", "Secant", "Radius"], answer: "Secant" },
+          { q: "Probability of getting head in a coin toss:", options: ["1", "0.25", "0.5"], answer: "0.5" },
+          { q: "Which term of the A.P. 3, 8, 13, 18, … is 78?", options: ["15th term", "16th term", "18th term"], answer: "16th term" },
+          { q: "Perimeter of rectangle with L=6, B=4?", options: ["20", "18", "22"], answer: "20" }
+        ],
+        hard: [
+          { q: "If sum of first n natural numbers is 55, find n.", options: ["5", "10", "11"], answer: "10" },
+          { q: "The roots of quadratic equation are:", options: ["Real and equal", "Real and distinct", "None"], answer: "None" },
+          { q: "Cube of 5?", options: ["125", "150", "100"], answer: "125" },
+          { q: "If a triangle has sides 3,4,5 → it is?", options: ["Right angled", "Equilateral", "Scalene"], answer: "Right angled" },
+          { q: "Derivative of sinx + cosy?", options: ["cosx+siny", "-cosz+siny", "cosx-siny"], answer: "cosx-siny" }
+        ]
+      },
+      biology: {
+        low: [
+          { q: "Smallest unit of life?", options: ["Cell", "Atom", "Organ"], answer: "Cell" },
+          { q: "Photosynthesis occurs in?", options: ["Chloroplast", "Mitochondria", "Nucleus"], answer: "Chloroplast" },
+          { q: "Blood is pumped by?", options: ["Heart", "Lungs", "Brain"], answer: "Heart" },
+          { q: "Organ used for breathing?", options: ["Lungs", "Kidneys", "Liver"], answer: "Lungs" },
+          { q: "Plant part that absorbs water?", options: ["Root", "Leaf", "Stem"], answer: "Root" }
+        ],
+        medium: [
+          { q: "Vertebrates have?", options: ["Backbone", "Gills", "Scales"], answer: "Backbone" },
+          { q: "Brain is protected by?", options: ["Skull", "Rib cage", "Spine"], answer: "Skull" },
+          { q: "Which blood group is universal donor?", options: ["O-", "AB+", "B+"], answer: "O-" },
+          { q: "Human body has how many bones?", options: ["206", "201", "210"], answer: "206" },
+          { q: "Largest organ of human body?", options: ["Skin", "Liver", "Heart"], answer: "Skin" }
+        ],
+        hard: [
+          { q: "Function of RBCs?", options: ["Carry Oxygen", "Fight Infections", "Clot Blood"], answer: "Carry Oxygen" },
+          { q: "Scientific name of Human?", options: ["Homo sapiens", "Pan troglodytes", "Canis lupus"], answer: "Homo sapiens" },
+          { q: "DNA is present in?", options: ["Nucleus", "Cytoplasm", "Ribosome"], answer: "Nucleus" },
+          { q: "Process of cell division?", options: ["Mitosis", "Diffusion", "Respiration"], answer: "Mitosis" },
+          { q: "Blood carries?", options: ["O2 & nutrients", "Only O2", "Only CO2"], answer: "O2 & nutrients" }
+        ]
+      },
+      commerce: {
+        low: [
+          { q: "Economics mainly studies", options: ["How to earn interest", "How people use limited resources to satisfy their wants", "How to make money"], answer: "How people use limited resources to satisfy their wants" },
+          { q: "Full form of GST?", options: ["Goods and Service Tax", "Global Sales Tax", "General State Tax"], answer: "Goods and Service Tax" },
+          { q: "Profit = ?", options: ["Selling Price - Cost Price", "Cost Price - Selling Price", "None"], answer: "Selling Price - Cost Price" },
+          { q: "Which is a type of account?", options: ["Personal", "Nominal", "Real"], answer: "Personal" },
+          { q: "Which is a liability?", options: ["Loan", "Cash", "Stock"], answer: "Loan" }
+        ],
+        medium: [
+          { q: "Debit means?", options: ["Increase in Asset", "Decrease in Asset", "Increase in Liability"], answer: "Increase in Asset" },
+          { q: "Current assets include?", options: ["Stock", "Furniture", "Building"], answer: "Stock" },
+          { q: "Balance Sheet shows?", options: ["Assets & Liabilities", "Income & Expense", "Profit & Loss"], answer: "Assets & Liabilities" },
+          { q: "Which is an expense?", options: ["Salary", "Creditors", "Debtors"], answer: "Salary" },
+          { q: "Who is called Father of Accounting?", options: ["Luca Pacioli", "Newton", "Edison"], answer: "Luca Pacioli" }
+        ],
+        hard: [
+          { q: "Trial Balance is prepared to?", options: ["Check Arithmetic Accuracy", "Show Profit", "Show Assets"], answer: "Check Arithmetic Accuracy" },
+          { q: "Depreciation means?", options: ["Decrease in value", "Increase in value", "No change"], answer: "Decrease in value" },
+          { q: "Which side of Balance Sheet shows Capital?", options: ["Liability", "Asset", "Both"], answer: "Liability" },
+          { q: "Gross Profit = ?", options: ["Sales - COGS", "Net Profit - Expenses", "Sales + Expenses"], answer: "Sales - COGS" },
+          { q: "Why is it important to keep accounts in business?", options: ["To ignore losses", "To monitor profit and loss", "To confuse competitors"], answer: "To monitor profit and loss" }
+        ]
+      },
+      arts: {
+        low: [
+          { q: "Who wrote the Indian National Anthem?", options: ["Tagore", "Nehru", "Gandhi"], answer: "Tagore" },
+          { q: "Capital of India?", options: ["Delhi", "Mumbai", "Chennai"], answer: "Delhi" },
+          { q: "Who painted Mona Lisa?", options: ["Leonardo da Vinci", "Picasso", "Van Gogh"], answer: "Leonardo da Vinci" },
+          { q: "How many continents?", options: ["7", "5", "6"], answer: "7" },
+          { q: "Who wrote Ramayana?", options: ["Valmiki", "Ved Vyas", "Tulsidas"], answer: "Valmiki" }
+        ],
+        medium: [
+          { q: "Father of Indian Constitution?", options: ["Ambedkar", "Gandhi", "Patel"], answer: "Ambedkar" },
+          { q: "First President of India?", options: ["Rajendra Prasad", "Nehru", "Patel"], answer: "Rajendra Prasad" },
+          { q: "Which is not a classical dance?", options: ["Ballet", "Kathak", "Bharatnatyam"], answer: "Ballet" },
+          { q: "India got independence in?", options: ["1947", "1950", "1942"], answer: "1947" },
+          { q: "Mahatma Gandhi was born in?", options: ["Porbandar", "Delhi", "Ahmedabad"], answer: "Porbandar" }
+        ],
+        hard: [
+          { q: "Who wrote Discovery of India?", options: ["Nehru", "Ambedkar", "Patel"], answer: "Nehru" },
+          { q: "Capital of France?", options: ["Paris", "Berlin", "Rome"], answer: "Paris" },
+          { q: "Author of Hamlet?", options: ["Shakespeare", "Dickens", "Tolstoy"], answer: "Shakespeare" },
+          { q: "Which year was UN formed?", options: ["1945", "1939", "1950"], answer: "1945" },
+          { q: "Dance form of Kerala?", options: ["Kathakali", "Kathak", "Odissi"], answer: "Kathakali" }
+        ]
+      }
+    };
+
+    let currentSubject = "";
+    let currentLevel = "low";
+    let score = 0;
+    let levelIndex = 0;
+    const levels = ["low", "medium", "hard"];
+
+    function chooseStream(stream) {
+      if (stream === "science") {
+        document.getElementById("stream-selection").style.display = "none";
+        document.getElementById("science-options").style.display = "block";
+      } else {
+        currentSubject = stream;
+        document.getElementById("stream-selection").style.display = "none";
+        startQuiz(stream);
+      }
+    }
+
+    function startQuiz(subject) {
+      currentSubject = subject;
+      currentLevel = "low";
+      levelIndex = 0;
+      score = 0;
+      quizContainer.style.display = "block";
+      loadQuiz();
+    }
+
+    function loadQuiz() {
+      const qList = questions[currentSubject][currentLevel];
+      let html = `<h2>${currentSubject.toUpperCase()} - ${currentLevel.toUpperCase()} Level</h2><form id="quizForm">`;
+      qList.forEach((q, i) => {
+        html += `
+          <div class="question">
+            <p><strong>${i+1}. ${q.q}</strong></p>
+            ${q.options.map(opt => `<label><input type="radio" name="q${i}" value="${opt}" required> ${opt}</label><br>`).join("")}
+          </div>
+        `;
+      });
+      html += `<button type="submit" class="btn">Submit</button></form>`;
+      quizContainer.innerHTML = html;
+
+      document.getElementById("quizForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        calculateScore();
+      });
+    }
+
+    function calculateScore() {
+      const formData = new FormData(document.getElementById("quizForm"));
+      questions[currentSubject][currentLevel].forEach((q, i) => {
+        if (formData.get(`q${i}`) === q.answer) score++;
+      });
+
+      levelIndex++;
+      if (levelIndex < levels.length) {
+        currentLevel = levels[levelIndex];
+        loadQuiz();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      const totalQuestions = levels.reduce((acc, lvl) => acc + questions[currentSubject][lvl].length, 0);
+      const resultHTML = `
+        <div class="result">
+          🎯 Final Score: ${score}/${totalQuestions}<br><br>
+          ${score >= totalQuestions * 0.7 
+            ? `✅ Congratulations! You are eligible for ${currentSubject.toUpperCase()}` 
+            : `❌ You need to improve your basics before choosing ${currentSubject.toUpperCase()}`}
+        </div>`;
+      quizContainer.innerHTML = resultHTML;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career & Education Advisor</title>
+<link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; font-family:Arial,sans-serif; scroll-behavior: smooth; }
+  
+  /* --- Background Image with Blur --- */
+  body {
+      display:flex;
+      min-height:100vh;
+      color:#333;
+      position: relative;
+  }
+  body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('study.jpg') no-repeat center center/cover;
+      filter: blur(5px);
+      z-index: -1;
+  }
+
+  /* Sidebar */
+  .sidebar { width:250px; background:#2563eb; color:white; display:flex; flex-direction:column; position:fixed; top:0; bottom:0; left:0; transition:width 0.3s; z-index:100;}
+  .sidebar.collapsed{width:70px;}
+  .sidebar h2{text-align:center;padding:20px 0;font-size:22px;border-bottom:1px solid rgba(255,255,255,0.2);}
+  .sidebar.collapsed h2{opacity:0;}
+  .menu{flex:1;display:flex;flex-direction:column;padding-top:20px;}
+  .menu a{display:flex;align-items:center;padding:15px 20px;color:#ecf0f1;text-decoration:none;font-size:16px;transition:all 0.3s;white-space:nowrap;}
+  .menu a:hover{background:#1e40af;color:#1abc9c;}
+  .menu a i{margin-right:15px; min-width:20px;text-align:center;}
+  .sidebar.collapsed .menu a span{display:none;}
+
+  /* Toggle Button */
+  .toggle-btn {position: absolute;bottom: 20px;left: 50%;transform: translateX(-50%);background: #facc15;color: #2563eb;font-weight: bold;border: none;padding: 12px 20px;cursor: pointer;border-radius: 8px;transition: all 0.3s ease;box-shadow: 0 4px 10px rgba(0,0,0,0.1);}
+  .toggle-btn:hover {background: #eab308;color: #1e40af;transform: translateX(-50%) scale(1.05);}
+
+  /* Top Navbar */
+  .topbar{position:fixed;top:0;left:250px;right:0;height:60px;background:#f9fafb;display:flex;align-items:center;justify-content:space-between;padding:0 20px;box-shadow:0 2px 6px rgba(0,0,0,0.1); z-index:99;transition:left 0.3s;}
+  .sidebar.collapsed ~ .topbar{left:70px;}
+  .topbar .logo{font-size:1.5rem;font-weight:bold;color:#2563eb;background:white;padding:5px 15px;border-radius:6px;position:relative;display:inline-block;}
+  .topbar .logo::after{content:"";display:block;width:100%;height:3px;background-color:#facc15;margin-top:3px;border-radius:2px;}
+  .topbar .nav-links a{margin:0 10px;color:#2563eb;text-decoration:none;font-size:1rem;font-weight:bold;transition:color 0.3s;}
+  .topbar .nav-links a:hover{color:#1e40af;}
+
+  /* Main content */
+  .main-content{flex:1; margin-left:250px; padding:80px 20px 20px 20px; transition:margin-left 0.3s;}
+  .sidebar.collapsed ~ .main-content{margin-left:70px;}
+
+  /* Main Heading */
+  header {text-align:center;padding:2rem 1rem;background:#2563eb;margin-bottom:20px;border-radius:10px;color:white;}
+  header h1 {font-size:2.5rem;font-weight:bold;color:white;margin:0;position:relative;display:inline-block;padding-bottom:0.5rem;}
+  header h1::after {content:"";display:block;width:100%;height:4px;background-color:#facc15;margin-top:0.5rem;border-radius:2px;}
+  header p {max-width:600px;margin:0.5rem auto 0;font-size:1.1rem;color:#f9fafb;}
+
+  .container {display:flex;flex-direction:column;align-items:center;gap:2rem;max-width:1200px;margin:auto;}
+  .card-row{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;}
+
+  /* Card Style */
+  .card {background:#fff;border:2px solid #2563eb;border-left:10px solid #facc15;border-radius:12px;padding:1.5rem;box-shadow:0 6px 15px rgba(0,0,0,0.15);text-align:center;transition:transform 0.3s, box-shadow 0.3s;min-width:200px;flex:1;max-width:250px;}
+  .card:hover {transform:scale(1.05);box-shadow:0 8px 20px rgba(0,0,0,0.2);}
+  .card h2{margin-bottom:0.5rem;font-size:1.5rem;color:#1f2937;}
+  .card p{color:#4b5563;font-size:0.95rem;margin-bottom:1rem;}
+  .btn{background-color:#2563eb;color:white;padding:0.6rem 1.2rem;border:none;border-radius:0.5rem;cursor:pointer;font-size:1rem;transition:background 0.3s ease;text-decoration:none;display:inline-block;}
+  .btn:hover{background-color:#1e40af;}
+
+  /* Quiz Section */
+  .quiz-section, .result{background:white;border-radius:10px;padding:1.5rem;box-shadow:0 4px 10px rgba(0,0,0,0.1); max-width:800px; margin:1rem auto;}
+  .options{display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem;}
+  .btn-quiz{background:#2563eb;color:white;border:none;padding:0.8rem 1.5rem;font-size:1rem;border-radius:8px; cursor:pointer; transition:all 0.3s ease;}
+  .btn-quiz:hover{background:#1e40af; transform:translateY(2px);}
+  .question{margin-bottom:1rem;}
+  .question strong{display:block;margin-bottom:0.5rem;color:#1f2937;}
+  .quiz-group { margin-bottom: 2rem; }
+  .quiz-group h3 { font-size: 1.2rem; margin-bottom: 1rem; color: #2563eb; }
+  #backHome{ margin-top:10px; background:#1abc9c; }
+  #backHome:hover{ background:#159e86; }
+
+  /* --- Zigzag Section Styles --- */
+  .why-us-section { width: 100%; max-width: 1000px; margin: 2rem auto; }
+  .why-us-section h2 { font-size: 2rem; color: #1f2937; margin-bottom: 2rem; position: relative; display: inline-block; text-align: center; width: 100%;}
+  .why-us-section h2::after { content: ''; display: block; width: 80px; height: 4px; background: #facc15; margin: 0.5rem auto 0; border-radius: 2px; }
+  
+  .feature-row {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .feature-row:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  }
+
+  .feature-row:nth-child(even) {
+      flex-direction: row-reverse;
+  }
+  
+  .feature-image, .feature-content {
+      flex: 1;
+  }
+  
+  .feature-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+  }
+  
+  .feature-content h3 {
+      font-size: 1.75rem;
+      color: #2563eb;
+      margin-bottom: 1rem;
+  }
+  
+  .feature-content p {
+      color: #4b5563;
+      font-size: 1rem;
+      line-height: 1.7;
+  }
+
+  @media (max-width: 768px) {
+      .feature-row, .feature-row:nth-child(even) {
+          flex-direction: column;
+          text-align: center;
+      }
+      .feature-content h3 {
+          margin-top: 1rem;
+          font-size: 1.5rem;
+      }
+  }
+
+  footer{background:#1f2937;color:white;text-align:center;padding:1rem;margin-top:2rem;font-size:0.9rem; border-radius:10px;}
+</style>
+</head>
+<body>
+  <!-- Sidebar, Topbar, Main Content, Quiz Section same as your base code -->
+  <!-- I am keeping everything exactly same, only background added -->
+
+  <div class="sidebar" id="sidebar">
+    <h2>Career Paths</h2>
+    <div class="menu">
+      <a href="#"><i class='bx bx-question-mark'></i> <span>Quiz</span></a>
+      <a href="#"><i class='bx bx-book-content'></i> <span>Stream Recommendation</span></a>
+      <a href="#"><i class='bx bx-book'></i> <span>Degree Courses</span></a>
+      <a href="#"><i class='bx bx-building'></i> <span>Nearby Colleges</span></a>
+      <a href="#"><i class='bx bx-briefcase'></i> <span>Internships</span></a>
+      <a href="#"><i class='bx bx-chalkboard'></i> <span>Workshops</span></a>
+    </div>
+    <button class="toggle-btn" onclick="toggleSidebar()">Toggle</button>
+  </div>
+
+  <div class="topbar">
+    <div class="logo">Career Advisor</div>
+    <div class="nav-links">
+      <a href="#homeContent">Home</a>
+      <a href="#about">About Us</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <header id="mainHeader">
+      <h1>One-Stop Career & Education Advisor</h1>
+      <p>Align your career path by exploring options that match your interests, skills, and future goals.</p>
+    </header>
+
+    <main class="container" id="cardSection">
+      <!-- All cards same as your base code -->
+      <div class="card-row">
+        <div class="card">
+          <h2>After 10th</h2>
+          <p>Are you confused about your future stream? Take a quick quiz to find out which stream is best for you!</p>
+          <button class="btn" onclick="startQuiz()">Explore</button>
+        </div>
+        <div class="card">
+          <h2>After 12th</h2>
+          <p>Explore degree programs and professional courses.</p>
+          <button class="btn">Explore Programs</button>
+        </div>
+        <div class="card">
+          <h2>Govt Exams</h2>
+          <p>Get info about UPSC, SSC, JEE, NEET, and more.</p>
+          <button class="btn">View Details</button>
+        </div>
+      </div>
+      <br>
+      <div class="card-row">
+        <div class="card">
+          <h2>Career Stories</h2>
+          <p>Read inspiring journeys of professionals.</p>
+          <button class="btn">Read Stories</button>
+        </div>
+        <div class="card">
+          <h2>Nearby Colleges</h2>
+          <p>Find colleges near you and explore courses.</p>
+          <button class="btn">Find Colleges</button>
+        </div>
+      </div>
+
+      <!-- Features same as base code -->
+      <div class="why-us-section">
+        <h2>Why Choose Our Platform?</h2>
+        <!-- Feature rows same as base code -->
+        <div class="feature-row">
+            <div class="feature-image">
+                <img src="https://source.unsplash.com/500x350/?idea,lightbulb" alt="Ideas">
+            </div>
+            <div class="feature-content">
+                <h3>Informed Choices</h3>
+                <p>Many students feel confused after the 10th and 12th. Our website provides the right information to guide them toward making well-informed career decisions.</p>
+            </div>
+        </div>
+        <div class="feature-row">
+            <div class="feature-image">
+                <img src="https://source.unsplash.com/500x350/?guidance,mentoring" alt="Mentoring">
+            </div>
+            <div class="feature-content">
+                <h3>Personalized Advice</h3>
+                <p>Every student is unique. We support them with quizzes and resources tailored to their individual skills, interests, and aspirations.</p>
+            </div>
+        </div>
+        <div class="feature-row">
+            <div class="feature-image">
+                <img src="https://source.unsplash.com/500x350/?bridge,connection" alt="Bridge">
+            </div>
+            <div class="feature-content">
+                <h3>Bridge The Gap</h3>
+                <p>We bridge the gap between education and career opportunities by helping students explore different fields and plan their future confidently.</p>
+            </div>
+        </div>
+        <div class="feature-row">
+            <div class="feature-image">
+                <img src="https://source.unsplash.com/500x350/?rocket,empower" alt="Empower">
+            </div>
+            <div class="feature-content">
+                <h3>Empowerment</h3>
+                <p>By providing practical insights and clear guidance, we empower students with the knowledge and self-confidence to pursue their dreams.</p>
+            </div>
+        </div>
+        <div class="feature-row">
+            <div class="feature-image">
+                <img src="https://source.unsplash.com/500x350/?simple,design" alt="Accessible">
+            </div>
+            <div class="feature-content">
+                <h3>Simple & Accessible</h3>
+                <p>With easy-to-use tools and expert resources, we make career planning a simple, stress-free, and accessible process for every student.</p>
+            </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="quizSection" style="display:none;">
+      <div class="quiz-section" id="quiz-container"></div>
+      <button id="backHome" class="btn" onclick="backToHome()">⬅ Back to Home</button>
+    </div>
+
+    <footer>&copy; 2025 Career & Education Advisor</footer>
+  </div>
+
+<script>
+const sidebar = document.getElementById('sidebar');
+function toggleSidebar(){ sidebar.classList.toggle('collapsed'); }
+
+const originalHeaderHTML = `
+  <h1>One-Stop Career & Education Advisor</h1>
+  <p>Align your career path by exploring options that match your interests, skills, and future goals.</p>
+`;
+
+function startQuiz() {
+    document.getElementById('mainHeader').innerHTML = `
+      <h1>Are you confused about your future stream after 10th?</h1>
+      <p>Take this quiz to find out which stream is best for you.</p>
+    `;
+    document.getElementById('cardSection').style.display = 'none';
+    document.getElementById('quizSection').style.display = 'block';
+    currentSubjectIndex = 0;
+    scores = { science: 0, commerce: 0, arts: 0 };
+    loadQuiz();
+}
+
+function backToHome() {
+    document.getElementById('mainHeader').innerHTML = originalHeaderHTML;
+    document.getElementById('quizSection').style.display = 'none';
+    document.getElementById('cardSection').style.display = 'block';
+}
+
+// --- Quiz data ---
+const questions = {
+  science:[
+    {q:"what is the force that pulls objests towards",options:["force","gravity","mass"],answer:"gravity"},
+    {q:"which is the chemical symbol of gold?",options:["Cu","Mg","Au"],answer:"Au"},
+    {q:"What is the boiling point of water?",options:["100 C","150 C","200 C"],answer:"100 C"},
+    {q:"which is the largest organ in human body?",options:["bone","skin","hair"],answer:"skin"},
+    {q:"what is the unit of force?",options:["newton","faraday","kilogram"],answer:"newton"},
+    {q:"which color of light has highest energy?",options:["red","blue","violet"],answer:"violet"},
+    {q:"which blood cells help fight infectiong?",options:["RBC &WBC","RBC","WBC"],answer:"WBC"},
+    {q:"which Metal is liquid at room temperature?",options:["Mercury","calcium","sodium"],answer:"Mercury"},
+    {q:"value of sin 60.",options:["√3/2","2/3","1"],answer:"√3/2"},
+    {q:"Perimeter of rectangle L=6,B=4",options:["20","18","22"],answer:"20"}
+  ],
+  commerce:[
+    {q:"Economics mainly studies",options:["How to earn interest","How people use limited resources to satisfy their wants","How to make money"],answer:"How people use limited resources to satisfy their wants"},
+    {q:"Full form of GST?",options:["Goods and Service Tax","Global Sales Tax","General State Tax"],answer:"Goods and Service Tax"},
+    {q:"Profit = ?",options:["Selling Price - Cost Price","Cost Price - Selling Price","None"],answer:"Selling Price - Cost Price"},
+    {q:"Which is a type of account?",options:["Personal","Nominal","Real"],answer:"Personal"},
+    {q:"Which is a liability?",options:["Loan","Cash","Stock"],answer:"Loan"},
+    {q:"Debit means?",options:["Increase in Asset","Decrease in Asset","Increase in Liability"],answer:"Increase in Asset"},
+    {q:"Current assets include?",options:["Stock","Furniture","Building"],answer:"Stock"},
+    {q:"Balance Sheet shows?",options:["Assets & Liabilities","Income & Expense","Profit & Loss"],answer:"Assets & Liabilities"},
+    {q:"Which is an expense?",options:["Salary","Creditors","Debtors"],answer:"Salary"},
+    {q:"Father of Accounting?",options:["Luca Pacioli","Newton","Edison"],answer:"Luca Pacioli"}
+  ],
+  arts:[
+    {q:"Who wrote the Indian National Anthem?",options:["Tagore","Nehru","Gandhi"],answer:"Tagore"},
+    {q:"Capital of India?",options:["Delhi","Mumbai","Chennai"],answer:"Delhi"},
+    {q:"Who painted Mona Lisa?",options:["Leonardo da Vinci","Picasso","Van Gogh"],answer:"Leonardo da Vinci"},
+    {q:"How many continents?",options:["7","5","6"],answer:"7"},
+    {q:"Who wrote Ramayana?",options:["Valmiki","Ved Vyas","Tulsidas"],answer:"Valmiki"},
+    {q:"Father of Indian Constitution?",options:["Ambedkar","Gandhi","Patel"],answer:"Ambedkar"},
+    {q:"First President of India?",options:["Rajendra Prasad","Nehru","Patel"],answer:"Rajendra Prasad"},
+    {q:"Which is not a classical dance?",options:["Ballet","Kathak","Bharatnatyam"],answer:"Ballet"},
+    {q:"India got independence in?",options:["1947","1950","1942"],answer:"1947"},
+    {q:"Mahatma Gandhi was born in?",options:["Porbandar","Delhi","Ahmedabad"],answer:"Porbandar"}
+  ]
+};
+
+let currentSubjectIndex = 0;
+const subjects = ['science', 'commerce', 'arts'];
+let scores = { science: 0, commerce: 0, arts: 0 };
+
+function loadQuiz() {
+    if (currentSubjectIndex < subjects.length) {
+        showSubjectQuestions(subjects[currentSubjectIndex]);
+    } else {
+        showFinalResult();
+    }
+}
+
+function showSubjectQuestions(subject) {
+    const quizContainer = document.getElementById('quiz-container');
+    quizContainer.innerHTML = '';
+    
+    let questionsHTML = `<div class="quiz-group"><h3>${subject.toUpperCase()} Questions</h3>`;
+    const subjectQuestions = questions[subject];
+
+    subjectQuestions.forEach((q, index) => {
+        questionsHTML += `
+            <div class="question">
+                <strong>Q${index + 1}: ${q.q}</strong>
+                <div class="options">
+                    ${q.options.map(opt => `
+                        <label>
+                            <input type="radio" name="${subject}-q${index}" value="${opt}" data-subject="${subject}" data-correct="${q.answer}">
+                            ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    });
+    questionsHTML += `</div>`;
+    
+    if (currentSubjectIndex < subjects.length - 1) {
+        questionsHTML += `<button class="btn-quiz" onclick="nextSubject()">Next</button>`;
+    } else {
+        questionsHTML += `<button class="btn-quiz" onclick="nextSubject()">Submit & Show Result</button>`;
+    }
+
+    quizContainer.innerHTML = questionsHTML;
+}
+
+function nextSubject() {
+    const currentSubject = subjects[currentSubjectIndex];
+    
+    const totalQuestionsInSubject = questions[currentSubject].length;
+    const answeredQuestions = document.querySelectorAll(`input[name^="${currentSubject}-"]:checked`).length;
+
+    if (answeredQuestions < totalQuestionsInSubject) {
+        alert("Please answer all questions before proceeding.");
+        return;
+    }
+
+    let currentScore = 0;
+    const radioButtons = document.querySelectorAll(`input[name^="${currentSubject}-"]:checked`);
+    radioButtons.forEach(radio => {
+        const correct = radio.getAttribute('data-correct');
+        if (radio.value === correct) {
+            currentScore++;
+        }
+    });
+    scores[currentSubject] = currentScore;
+
+    currentSubjectIndex++;
+    loadQuiz();
+}
+
+function showFinalResult() {
+    const totalQuestionsPerSubject = 10;
+    const resultHTML = `
+    <div class="result">
+        <h2>🎯 Final Result</h2>
+        <p>Science: ${scores.science}/${totalQuestionsPerSubject} — ${scores.science >= 5 ? "✅ Eligible" : "❌ Not Eligible"}</p>
+        <p>Commerce: ${scores.commerce}/${totalQuestionsPerSubject} — ${scores.commerce >= 5 ? "✅ Eligible" : "❌ Not Eligible"}</p>
+        <p>Arts: ${scores.arts}/${totalQuestionsPerSubject} — ${scores.arts >= 5 ? "✅ Eligible" : "❌ Not Eligible"}</p>
+        
+        <h3>
+            ${Math.max(scores.science, scores.commerce, scores.arts) === scores.science ? "🌟 Recommended Stream: Science" :
+              Math.max(scores.science, scores.commerce, scores.arts) === scores.commerce ? "🌟 Recommended Stream: Commerce" : "🌟 Recommended Stream: Arts"}
+        </h3>
+
+        <div style="margin-top:20px; display:flex; gap:15px; justify-content:center;">
+            <button class="btn" onclick="openScience()">Science</button>
+            <button class="btn" onclick="openCommerce()">Commerce</button>
+            <button class="btn" onclick="openArts()">Arts</button>
+        </div>
+    </div>`;
+
+    document.getElementById("quiz-container").innerHTML = resultHTML;
+}
+
+function openScience() {
+    alert("Details about Science Stream will go here.");
+}
+function openCommerce() {
+    alert("Details about Commerce Stream will go here.");
+}
+function openArts() {
+    alert("Details about Arts Stream will go here.");
+}
+</script>
+
+</body>
+</html>

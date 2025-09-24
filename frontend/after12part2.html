@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career & Education Advisor</title>
+<link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; font-family:Arial,sans-serif; scroll-behavior: smooth; }
+  body { display:flex; min-height:100vh; background:#f9fafb; color:#333; }
+
+  /* Sidebar */
+  .sidebar { width:250px; background:#2563eb; color:white; display:flex; flex-direction:column; position:fixed; top:0; bottom:0; left:0; transition:width 0.3s; z-index:100;}
+  .sidebar.collapsed{width:70px;}
+  .sidebar h2{text-align:center;padding:20px 0;font-size:22px;border-bottom:1px solid rgba(255,255,255,0.2);}
+  .sidebar.collapsed h2{opacity:0;}
+  .menu{flex:1;display:flex;flex-direction:column;padding-top:20px;}
+  .menu a{display:flex;align-items:center;padding:15px 20px;color:#ecf0f1;text-decoration:none;font-size:16px;transition:all 0.3s;white-space:nowrap;}
+  .menu a:hover{background:#1e40af;color:#1abc9c;}
+  .menu a i{margin-right:15px; min-width:20px;text-align:center;}
+  .sidebar.collapsed .menu a span{display:none;}
+
+  /* Toggle Button */
+  .toggle-btn {position: absolute;bottom: 20px;left: 50%;transform: translateX(-50%);background: #facc15;color: #2563eb;font-weight: bold;border: none;padding: 12px 20px;cursor: pointer;border-radius: 8px;transition: all 0.3s ease;box-shadow: 0 4px 10px rgba(0,0,0,0.1);}
+  .toggle-btn:hover {background: #eab308;color: #1e40af;transform: translateX(-50%) scale(1.05);}
+
+  /* Top Navbar */
+  .topbar{position:fixed;top:0;left:250px;right:0;height:60px;background:#f9fafb;display:flex;align-items:center;justify-content:space-between;padding:0 20px;box-shadow:0 2px 6px rgba(0,0,0,0.1); z-index:99;transition:left 0.3s;}
+  .sidebar.collapsed ~ .topbar{left:70px;}
+  .topbar .logo{font-size:1.5rem;font-weight:bold;color:#2563eb;background:white;padding:5px 15px;border-radius:6px;position:relative;display:inline-block;}
+  .topbar .logo::after{content:"";display:block;width:100%;height:3px;background-color:#facc15;margin-top:3px;border-radius:2px;}
+  .topbar .nav-links a{margin:0 10px;color:#2563eb;text-decoration:none;font-size:1rem;font-weight:bold;transition:color 0.3s;}
+  .topbar .nav-links a:hover{color:#1e40af;}
+
+  /* Main content */
+  .main-content{flex:1; margin-left:250px; padding:80px 20px 20px 20px; transition:margin-left 0.3s;}
+  .sidebar.collapsed ~ .main-content{margin-left:70px;}
+
+  /* Main Heading */
+  header {text-align:center;padding:2rem 1rem;background:#2563eb;margin-bottom:20px;border-radius:10px;color:white;}
+  header h1 {font-size:2.5rem;font-weight:bold;color:white;margin:0;position:relative;display:inline-block;padding-bottom:0.5rem;}
+  header h1::after {content:"";display:block;width:100%;height:4px;background-color:#facc15;margin-top:0.5rem;border-radius:2px;}
+  header p {max-width:600px;margin:0.5rem auto 0;font-size:1.1rem;color:#f9fafb;}
+
+  .container {display:flex;flex-direction:column;align-items:center;gap:2rem;max-width:1200px;margin:auto;}
+  .card-row{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;}
+
+  /* Card Style */
+  .card {background:#fff;border:2px solid #2563eb;border-left:10px solid #facc15;border-radius:12px;padding:1.5rem;box-shadow:0 6px 15px rgba(0,0,0,0.15);text-align:center;transition:transform 0.3s, box-shadow 0.3s;min-width:200px;flex:1;max-width:250px;}
+  .card:hover {transform:scale(1.05);box-shadow:0 8px 20px rgba(0,0,0,0.2);}
+  .card h2{margin-bottom:0.5rem;font-size:1.5rem;color:#1f2937;}
+  .card p{color:#4b5563;font-size:0.95rem;margin-bottom:1rem;}
+  .btn{background-color:#2563eb;color:white;padding:0.6rem 1.2rem;border:none;border-radius:0.5rem;cursor:pointer;font-size:1rem;transition:background 0.3s ease;text-decoration:none;display:inline-block;}
+  .btn:hover{background-color:#1e40af;}
+
+  /* Sections */
+  .quiz-section, .after12-section, .result{background:white;border-radius:10px;padding:1.5rem;box-shadow:0 4px 10px rgba(0,0,0,0.1); max-width:800px; margin:1rem auto;}
+  .options{display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem;}
+  .btn-quiz{background:#2563eb;color:white;border:none;padding:0.8rem 1.5rem;font-size:1rem;border-radius:8px; cursor:pointer; transition:all 0.3s ease;}
+  .btn-quiz:hover{background:#1e40af; transform:translateY(-2px);}
+  .question{margin-bottom:1rem;}
+  .question strong{display:block;margin-bottom:0.5rem;color:#1f2937;}
+  .quiz-group { margin-bottom: 2rem; }
+  .quiz-group h3 { font-size: 1.2rem; margin-bottom: 1rem; color: #2563eb; }
+  #backHome{ margin-top:10px; background:#1abc9c; }
+  #backHome:hover{ background:#159e86; }
+
+  footer{background:#1f2937;color:white;text-align:center;padding:1rem;margin-top:2rem;font-size:0.9rem; border-radius:10px;}
+</style>
+</head>
+<body>
+  <div class="sidebar" id="sidebar">
+    <h2>Career Paths</h2>
+    <div class="menu">
+      <a href="#"><i class='bx bx-question-mark'></i> <span>Quiz</span></a>
+      <a href="#"><i class='bx bx-book-content'></i> <span>Stream Recommendation</span></a>
+      <a href="#"><i class='bx bx-book'></i> <span>Degree Courses</span></a>
+      <a href="#"><i class='bx bx-building'></i> <span>Nearby Colleges</span></a>
+      <a href="#"><i class='bx bx-briefcase'></i> <span>Internships</span></a>
+      <a href="#"><i class='bx bx-chalkboard'></i> <span>Workshops</span></a>
+    </div>
+    <button class="toggle-btn" onclick="toggleSidebar()">Toggle</button>
+  </div>
+
+  <div class="topbar">
+    <div class="logo">Career Advisor</div>
+    <div class="nav-links">
+      <a href="#homeContent">Home</a>
+      <a href="#about">About Us</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <header id="mainHeader">
+      <h1>One-Stop Career & Education Advisor</h1>
+      <p>Align your career path by exploring options that match your interests, skills, and future goals.</p>
+    </header>
+
+    <main class="container" id="cardSection">
+      <div class="card-row">
+        <div class="card">
+          <h2>After 10th</h2>
+          <p>Are you confused about your future stream? Take a quick quiz to find out which stream is best for you!</p>
+          <button class="btn" onclick="startQuiz()">Explore</button>
+        </div>
+        <div class="card">
+          <h2>After 12th</h2>
+          <p>Explore degree programs and professional courses.</p>
+          <button class="btn" onclick="startAfter12()">Explore Programs</button>
+        </div>
+        <div class="card">
+          <h2>Govt Exams</h2>
+          <p>Get info about UPSC, SSC, JEE, NEET, and more.</p>
+          <button class="btn">View Details</button>
+        </div>
+      </div>
+    </main>
+
+    <div id="quizSection" style="display:none;">
+      <div class="quiz-section" id="quiz-container"></div>
+      <button id="backHome" class="btn" onclick="backToHome()">⬅ Back to Home</button>
+    </div>
+
+    <div id="after12Section" style="display:none;">
+      <div class="after12-section" id="after12-container"></div>
+      <button id="backHome" class="btn" onclick="backToHome()">⬅ Back to Home</button>
+    </div>
+
+    <footer>&copy; 2025 Career & Education Advisor</footer>
+  </div>
+
+<script>
+const sidebar = document.getElementById('sidebar');
+function toggleSidebar(){ sidebar.classList.toggle('collapsed'); }
+
+const originalHeaderHTML = `
+  <h1>One-Stop Career & Education Advisor</h1>
+  <p>Align your career path by exploring options that match your interests, skills, and future goals.</p>
+`;
+
+function backToHome() {
+  document.getElementById('mainHeader').innerHTML = originalHeaderHTML;
+  document.getElementById('quizSection').style.display = 'none';
+  document.getElementById('after12Section').style.display = 'none';
+  document.getElementById('cardSection').style.display = 'block';
+}
+
+/* ------------- AFTER 12 FUNCTIONALITY ------------- */
+function startAfter12(){
+  document.getElementById('cardSection').style.display = 'none';
+  document.getElementById('after12Section').style.display = 'block';
+  loadAfter12Options();
+}
+
+function loadAfter12Options(){
+  const container=document.getElementById('after12-container');
+  container.innerHTML=`
+    <h2>Select Your Stream After 12th</h2>
+    <div class="options">
+      <button class="btn" onclick="selectStream('science')">Science</button>
+      <button class="btn" onclick="showRecommendation('commerce')">Commerce</button>
+      <button class="btn" onclick="showRecommendation('arts')">Arts</button>
+      <button class="btn" onclick="showRecommendation('diploma')">Diploma</button>
+      <button class="btn" onclick="showRecommendation('Other')">Other</button>
+    </div>
+  `;
+}
+
+function selectStream(stream){
+  const container=document.getElementById('after12-container');
+  if(stream==='science'){
+    container.innerHTML=`
+      <h2>Science Stream</h2>
+      <p>Select your combination:</p>
+      <div class="options">
+        <button class="btn" onclick="showRecommendation('science-maths')">Science (PCM / Maths)</button>
+        <button class="btn" onclick="showRecommendation('science-bio')">Science (PCB / Biology)</button>
+      </div>
+    `;
+  }
+}
+
+function showRecommendation(type){
+  const container=document.getElementById('after12-container');
+  let content="";
+  if(type==='science-maths'){
+    content=`<h2>Recommended Courses for Science (Maths)</h2>
+      <ul>
+        <b><li>B.Tech / BE (Engineering)-Popular branches: </li></b>
+        <li>Computer Science(CSE)</li>
+        <li>Artificial Intelligence & Date Science</li>
+        <li>Mechanical Engineering</li>
+        <li>Civil Engineering</li>
+        <li>Electrical / electronics Engineering</li>
+        <li>IT/ Software Engineering</li>
+        <li>Aerospace Engineering</li>
+        <li>Chemical Engineering</li>
+        <li>Automobile Engineering</li>
+        <li>Robotics & Automation</li>
+        <li>B.Arch (Architecture)</li>
+        <br>
+        <b><li>BCA (Bechlor Of Computer Applications)</li>
+        <li><li>B.Sc IT(Infrormation Technology)</li>
+        <li>B.Sc CS(Computer Science)</li>
+        <li>B.Sc AI/ML/Data Science</li>
+        <li>B.Sc (Physics, Chemistry, Maths, Computer Science)</li>
+        <li>Game Design/Animation</li></b>
+
+        
+      </ul>`;
+  }
+  else if(type==='science-bio'){
+    content=`<h2>Recommended Courses for Science (Biology)</h2>
+      <ul>
+        <li>MBBS / BDS / BAMS / BHMS</li>
+        <li>B.Sc Nursing</li>
+        <li>Pharmacy (B.Pharm)</li>
+        <li>Physiotherapy (BPT)</li>
+        <li>Microbiology / Biotechnology</li>
+      </ul>`;
+  }
+  else if(type==='commerce'){
+    content=`<h2>Recommended Courses for Commerce</h2>
+      <ul>
+        <li>B.Com (General / Hons)</li>
+        <li>CA / CS / CMA</li>
+        <li>BBA / BBM</li>
+        <li>Economics / Finance / Banking</li>
+        <li>Hotel Management</li>
+      </ul>`;
+  }
+  else if(type==='arts'){
+    content=`<h2>Recommended Courses for Arts</h2>
+      <ul>
+        <li>BA (Political Science, History, Sociology, Psychology)</li>
+        <li>BFA (Fine Arts)</li>
+        <li>B.Ed (Teaching)</li>
+        <li>Mass Communication / Journalism</li>
+        <li>Social Work / UPSC Preparation</li>
+      </ul>`;
+  }
+  else if(type==='diploma'){
+    content=`<h2>Recommended Options After Diploma</h2>
+      <ul>
+        <li>Direct Entry to 2nd Year of B.Tech</li>
+        <li>Government Technical Jobs</li>
+        <li>ITI + Skill Development Courses</li>
+        <li>Entrepreneurship</li>
+      </ul>`;
+  }
+  container.innerHTML=content;
+}
+
+/* ------------- QUIZ FUNCTIONALITY (After 10th) ------------- */
+// Your existing quiz code remains the same here (unchanged)
+</script>
+</body>
+</html>
